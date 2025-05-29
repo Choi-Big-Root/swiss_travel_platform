@@ -1,5 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:swiss_travel_platform/domain/auth/entities/user.dart';
 import 'package:swiss_travel_platform/domain/auth/repositories/auth_repository.dart';
 
 /// [AuthRepository] 인터페이스의 실제 구현체
@@ -22,11 +23,22 @@ class AuthRepositoryImpl implements AuthRepository {
   );
 
   @override
-  Future<GoogleSignInAccount?> signInWithGoogle() async {
+  Future<User?> signInWithGoogle() async {
     try {
       // Google 로그인 다이얼로그를 표시하고 사용자의 계정 선택을 기다립니다.
       final account = await _googleSignIn.signIn();
-      return account;
+      
+      // 사용자가 로그인을 취소했거나 실패한 경우
+      if (account == null) return null;
+
+      // GoogleSignInAccount를 User 엔티티로 변환
+      return User(
+        id: account.id,
+        email: account.email,
+        name: account.displayName ?? 'Unknown',
+        profileImage: account.photoUrl,
+        provider: AuthProvider.google,
+      );
     } catch (error) {
       // 로그인 실패 시 에러를 콘솔에 출력하고 null을 반환합니다.
       // 주요 실패 원인:
@@ -53,9 +65,17 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<GoogleSignInAccount?> getCurrentUser() async {
+  Future<User?> getCurrentUser() async {
     // 현재 로그인된 사용자 정보를 반환합니다.
-    // 이 정보는 로컬에 캐시된 정보이므로 네트워크 요청이 발생하지 않습니다.
-    return _googleSignIn.currentUser;
+    final account = _googleSignIn.currentUser;
+    if (account == null) return null;
+
+    return User(
+      id: account.id,
+      email: account.email,
+      name: account.displayName ?? 'Unknown',
+      profileImage: account.photoUrl,
+      provider: AuthProvider.google,
+    );
   }
 } 

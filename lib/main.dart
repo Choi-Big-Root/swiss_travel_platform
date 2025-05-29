@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swiss_travel_platform/core/router/app_router.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
   // .env 파일 로드
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "assets/.env");
   
   runApp(
     const ProviderScope(
@@ -14,10 +16,15 @@ Future<void> main() async {
   );
 }
 
+/// 앱의 루트 위젯
+/// 
+/// 앱의 전반적인 설정을 담당합니다:
+/// - 라우팅 설정
+/// - 테마 설정
+/// - 다국어 설정 (추후 구현)
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
@@ -44,6 +51,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routerConfig: goRouter,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

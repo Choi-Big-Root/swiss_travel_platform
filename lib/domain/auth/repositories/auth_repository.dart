@@ -1,4 +1,5 @@
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:swiss_travel_platform/domain/auth/entities/user.dart';
 
 /// 인증 관련 작업을 처리하는 레포지토리 인터페이스
 /// 
@@ -7,15 +8,16 @@ import 'package:google_sign_in/google_sign_in.dart';
 abstract class AuthRepository {
   /// Google 계정을 사용하여 로그인을 시도합니다.
   /// 
-  /// 성공 시 [GoogleSignInAccount] 객체를 반환하며, 이 객체에는 사용자의 기본 정보가 포함됩니다.
+  /// 성공 시 [User] 객체를 반환하며, 이 객체에는 사용자의 기본 정보가 포함됩니다.
   /// 실패 시 null을 반환합니다.
   /// 
   /// 주요 반환 정보:
   /// - email: 사용자의 이메일 주소
-  /// - displayName: 사용자의 표시 이름
-  /// - photoUrl: 프로필 사진 URL
-  /// - id: Google 계정의 고유 식별자
-  Future<GoogleSignInAccount?> signInWithGoogle();
+  /// - name: 사용자의 이름
+  /// - profileImage: 프로필 사진 URL (없을 수 있음)
+  /// - id: 사용자의 고유 식별자
+  /// - provider: 인증 제공자 (Google)
+  Future<User?> signInWithGoogle();
 
   /// 현재 로그인된 사용자를 로그아웃 처리합니다.
   /// 
@@ -28,9 +30,9 @@ abstract class AuthRepository {
 
   /// 현재 로그인된 사용자 정보를 반환합니다.
   /// 
-  /// 로그인된 사용자가 있다면 해당 사용자의 [GoogleSignInAccount] 객체를 반환하고,
+  /// 로그인된 사용자가 있다면 해당 사용자의 [User] 객체를 반환하고,
   /// 로그인된 사용자가 없다면 null을 반환합니다.
   /// 
   /// 이 메서드는 캐시된 사용자 정보를 반환하므로, 네트워크 요청을 하지 않습니다.
-  Future<GoogleSignInAccount?> getCurrentUser();
+  Future<User?> getCurrentUser();
 } 

@@ -53,6 +53,8 @@ dependencies:
   # UI 컴포넌트
   flutter_svg: ^2.0.9
   cached_network_image: ^3.3.0
+  # 환경 변수
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swiss_travel_platform/core/router/app_router.dart';
 
-void main() {
+Future<void> main() async {
+  // .env 파일 로드
+  await dotenv.load(fileName: ".env");
+  
   runApp(
     const ProviderScope(
       child: MyApp(),
